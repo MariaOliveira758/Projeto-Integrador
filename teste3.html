@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Carrinho estilo Shein</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+</head>
+<body>
+
+    <!-- Navbar -->
+  <nav class="navbar navbar-light bg-light px-3">
+    <a class="navbar-brand" href="#">Minha Loja</a>
+    <button class="btn position-relative" id="openCartBtn">
+      <i class="bi bi-bag" style="font-size: 1.5rem;"></i>
+      <span class="cart-badge" id="cartCount">0</span>
+    </button>
+  </nav>
+  
+  <!-- Grid de Produtos -->
+  <div class="container mt-4">
+    <div class="d-flex flex-wrap justify-content-start">
+      
+      <!-- Produto 1 -->
+      <div class="card m-2 p-1" style="width: 18rem;">
+        <img src="img/Bolo-Choconinho-1.jpg" class="card-img-top" height="250">
+        <div class="card-body">
+          <h5>Bolo de ChocoNinho</h5>
+          <p class="card-text">Massa de chocolate meio amargo com recheio de ninho e nutella</p>
+          <p><strong>R$ 29,99</strong></p>
+          <button class="btn btn-shein btn-sm add-to-cart" 
+            data-product-id="123" 
+            data-product-name="Bolo de ChocoNinho" 
+            data-product-price="29.99" 
+            data-product-img="img/Bolo-Choconinho-1.jpg">
+            🛒
+          </button>
+        </div>
+      </div>
+
+      <!-- Produto 2 -->
+      <div class="card m-2 p-1" style="width: 18rem;">
+        <img src="img/bolo de cenoura.jpg" alt="Produto" class="card-img-top" height="250">
+        <div class="card-body">
+          <h5>Bolo de Cenoura</h5>
+          <p class="card-text">Tradicional bolo de cenoura com cobertura de chocolate</p>
+          <p><strong>R$ 49,90</strong></p>
+          <button class="btn btn-shein btn-sm add-to-cart" 
+            data-product-id="124" 
+            data-product-name="Bolo de Cenoura" 
+            data-product-price="49.90" 
+            data-product-img="img/bolo de cenoura.jpg">
+            🛒
+          </button>
+        </div>
+      </div>
+
+  <!-- Sidebar Carrinho -->
+  <div id="cartSidebar">
+    <div class="cart-header d-flex justify-content-between align-items-center">
+      <h5>Meu Carrinho</h5>
+      <button class="btn btn-sm btn-outline-secondary" id="closeCartBtn">&times;</button>
+    </div>
+    <div class="cart-body" id="cartItems">
+      <p class="text-muted">Seu carrinho está vazio</p>
+    </div>
+    <div class="cart-footer">
+      <div class="d-flex justify-content-between mb-2">
+        <strong>Total:</strong>
+        <strong id="cartTotal">R$ 0,00</strong>
+      </div>
+      <button class="btn btn-shein btn-block">Finalizar Compra</button>
+    </div>
+  </div>
+      </div>
+    </div>
+    
+
+  <!-- Scripts -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+    let cart = [];
+    const cartSidebar = document.getElementById("cartSidebar");
+    const openCartBtn = document.getElementById("openCartBtn");
+    const closeCartBtn = document.getElementById("closeCartBtn");
+    const cartItemsContainer = document.getElementById("cartItems");
+    const cartCount = document.getElementById("cartCount");
+    const cartTotal = document.getElementById("cartTotal");
+
+    function updateCart() {
+      cartItemsContainer.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="text-muted">Seu carrinho está vazio</p>';
+      } else {
+        cart.forEach((item, index) => {
+          total += item.price;
+          cartItemsContainer.innerHTML += `
+            <div class="cart-item">
+              <button class="remove-item" onclick="removeFromCart(${index})">&times;</button>
+              <img src="${item.img}" alt="${item.name}">
+              <div>
+                <h6>${item.name}</h6>
+                <small>R$ ${item.price.toFixed(2)}</small>
+              </div>
+            </div>
+          `;
+        });
+      }
+
+      cartCount.textContent = cart.length;
+      cartTotal.textContent = "R$ " + total.toFixed(2);
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      updateCart();
+    }
+
+    document.querySelectorAll(".add-to-cart").forEach(button => {
+      button.addEventListener("click", function() {
+        const product = {
+          id: this.getAttribute("data-product-id"),
+          name: this.getAttribute("data-product-name"),
+          price: parseFloat(this.getAttribute("data-product-price")),
+          img: this.getAttribute("data-product-img")
+        };
+        cart.push(product);
+        updateCart();
+        cartSidebar.classList.add("active"); // abre o carrinho automaticamente
+      });
+    });
+
+    openCartBtn.addEventListener("click", () => cartSidebar.classList.add("active"));
+    closeCartBtn.addEventListener("click", () => cartSidebar.classList.remove("active"));
+  </script>
+</body>
+</html>
+
+
+
+
+
